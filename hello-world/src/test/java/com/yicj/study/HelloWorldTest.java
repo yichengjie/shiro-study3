@@ -3,9 +3,12 @@ package com.yicj.study;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.config.Ini;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.text.IniRealm;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.junit.Assert;
@@ -56,5 +59,18 @@ public class HelloWorldTest {
         return subject ;
     }
 
+    /**
+     * 手动调用realm认证
+     */
+    @Test
+    public void manualRealm(){
+        IniRealm realm = new IniRealm("classpath:shiro-role.ini");
+        realm.setName("iniRealm");
+        // 这里init 需要手动调用
+        realm.init();
+        UsernamePasswordToken token = new UsernamePasswordToken("zhang", "123");
+        AuthenticationInfo info = realm.getAuthenticationInfo(token);
+        log.info("info : {}", info);
+    }
 
 }
