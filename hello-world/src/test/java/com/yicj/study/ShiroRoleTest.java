@@ -11,12 +11,7 @@ import java.util.Arrays;
 
 @Slf4j
 public class ShiroRoleTest extends BaseTest{
-    @Test
-    public void testHelloworld() {
-        login("classpath:shiro.ini", "zhang", "123");
-        //6、退出
-        subject().logout();
-    }
+
 
     @Test
     public void testHasRole() {
