@@ -1,16 +1,14 @@
 package com.yicj.study.oauth.common;
 
 import net.sf.ehcache.Ehcache;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.cache.support.SimpleValueWrapper;
-
 import java.util.*;
 
 public class SpringCacheManagerWrapper implements CacheManager {
-
     private org.springframework.cache.CacheManager cacheManager;
 
     /**

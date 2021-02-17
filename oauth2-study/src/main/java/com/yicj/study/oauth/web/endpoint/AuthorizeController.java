@@ -44,11 +44,9 @@ public class AuthorizeController {
             Model model,
             HttpServletRequest request)
             throws URISyntaxException, OAuthSystemException {
-
         try {
             //构建OAuth 授权请求
             OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
-
             //检查传入的客户端id是否正确
             if (!oAuthService.checkClientId(oauthRequest.getClientId())) {
                 OAuthResponse response =
@@ -66,7 +64,6 @@ public class AuthorizeController {
                     return "oauth2login";
                 }
             }
-
             String username = (String)subject.getPrincipal();
             //生成授权码
             String authorizationCode = null;
