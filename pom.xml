@@ -12,6 +12,7 @@
         <module>hello-world</module>
         <module>shiro-web-study</module>
         <module>oauth2-study</module>
+        <module>spring-boot-study</module>
     </modules>
 
     <parent>
