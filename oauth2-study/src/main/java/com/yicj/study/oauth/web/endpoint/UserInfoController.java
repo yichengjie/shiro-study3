@@ -1,4 +1,4 @@
-package com.yicj.study.oauth.web.controller;
+package com.yicj.study.oauth.web.endpoint;
 
 import com.yicj.study.oauth.common.Constants;
 import com.yicj.study.oauth.service.OAuthService;

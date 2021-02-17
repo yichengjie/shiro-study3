@@ -1,4 +1,4 @@
-package com.yicj.study.oauth.web.controller;
+package com.yicj.study.oauth.web.endpoint;
 
 import com.yicj.study.oauth.common.Constants;
 import com.yicj.study.oauth.service.OAuthService;
@@ -77,15 +77,12 @@ public class AccessTokenController {
             OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
             final String accessToken = oauthIssuerImpl.accessToken();
             oAuthService.addAccessToken(accessToken, oAuthService.getUsernameByAuthCode(authCode));
-
-
             //生成OAuth响应
             OAuthResponse response = OAuthASResponse
                     .tokenResponse(HttpServletResponse.SC_OK)
                     .setAccessToken(accessToken)
                     .setExpiresIn(String.valueOf(oAuthService.getExpireIn()))
                     .buildJSONMessage();
-
             //根据OAuthResponse生成ResponseEntity
             return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
 

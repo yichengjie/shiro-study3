@@ -1,4 +1,4 @@
-package com.yicj.study.oauth.web.controller;
+package com.yicj.study.oauth.web.endpoint;
 
 import com.yicj.study.oauth.common.Constants;
 import com.yicj.study.oauth.service.ClientService;
@@ -77,7 +77,6 @@ public class AuthorizeController {
                 authorizationCode = oauthIssuerImpl.authorizationCode();
                 oAuthService.addAuthCode(authorizationCode, username);
             }
-
             //进行OAuth响应构建
             OAuthASResponse.OAuthAuthorizationResponseBuilder builder =
                     OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FOUND);
@@ -85,10 +84,8 @@ public class AuthorizeController {
             builder.setCode(authorizationCode);
             //得到到客户端重定向地址
             String redirectURI = oauthRequest.getParam(OAuth.OAUTH_REDIRECT_URI);
-
             //构建响应
             final OAuthResponse response = builder.location(redirectURI).buildQueryMessage();
-
             //根据OAuthResponse返回ResponseEntity响应
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(new URI(response.getLocationUri()));
