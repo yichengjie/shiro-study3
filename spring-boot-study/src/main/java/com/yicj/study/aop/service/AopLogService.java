@@ -28,7 +28,7 @@ public class AopLogService extends StaticMethodMatcherPointcutAdvisor {
     private Log createLog(MethodInvocation invocation) throws Throwable {
         Method method = invocation.getMethod();
         Object aThis = invocation.getThis();
-        SystemLogger methodAnnotation = findAnnotation(aThis.getClass(), method, SystemLogger.class);
+        SystemLogger methodAnnotation = findAnnotation(method, SystemLogger.class);
         String description = methodAnnotation.description();
         Log logInfo = new Log();
         logInfo.setDescp(description);
@@ -42,11 +42,11 @@ public class AopLogService extends StaticMethodMatcherPointcutAdvisor {
     //matches方法来判断是否切入，true为切入，false不切入。
     @Override
     public boolean matches(Method method, Class<?> aClass) {
-        SystemLogger annotation = findAnnotation(aClass, method, SystemLogger.class);
+        SystemLogger annotation = findAnnotation(method, SystemLogger.class);
         return annotation != null;
     }
 
-    private SystemLogger findAnnotation(Class<?> aClass, Method method, Class<SystemLogger> systemLoggerClass) {
+    private SystemLogger findAnnotation(Method method, Class<SystemLogger> systemLoggerClass) {
         SystemLogger annotation = method.getAnnotation(systemLoggerClass);
         return annotation ;
     }
