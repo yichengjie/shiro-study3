@@ -31,12 +31,8 @@ public class AccessTokenController {
     @Autowired
     private OAuthService oAuthService;
 
-    @Autowired
-    private UserService userService;
-
     @RequestMapping("/accessToken")
-    public HttpEntity token(HttpServletRequest request)
-            throws URISyntaxException, OAuthSystemException {
+    public HttpEntity token(HttpServletRequest request) throws OAuthSystemException {
         try {
             //构建OAuth请求
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(request);
@@ -49,7 +45,6 @@ public class AccessTokenController {
                                 .buildJSONMessage();
                 return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
-
             // 检查客户端安全KEY是否正确
             if (!oAuthService.checkClientSecret(oauthRequest.getClientSecret())) {
                 OAuthResponse response =
@@ -59,7 +54,6 @@ public class AccessTokenController {
                                 .buildJSONMessage();
                 return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
-
             String authCode = oauthRequest.getParam(OAuth.OAUTH_CODE);
             // 检查验证类型，此处只检查AUTHORIZATION_CODE类型，其他的还有PASSWORD或REFRESH_TOKEN
             if (oauthRequest.getParam(OAuth.OAUTH_GRANT_TYPE).equals(GrantType.AUTHORIZATION_CODE.toString())) {
@@ -72,7 +66,6 @@ public class AccessTokenController {
                     return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
                 }
             }
-
             //生成Access Token
             OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
             final String accessToken = oauthIssuerImpl.accessToken();
@@ -85,7 +78,6 @@ public class AccessTokenController {
                     .buildJSONMessage();
             //根据OAuthResponse生成ResponseEntity
             return new ResponseEntity(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
-
         } catch (OAuthProblemException e) {
             //构建错误响应
             OAuthResponse res = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST).error(e)

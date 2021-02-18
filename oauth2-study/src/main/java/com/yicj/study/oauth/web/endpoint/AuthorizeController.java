@@ -40,10 +40,7 @@ public class AuthorizeController {
     private ClientService clientService;
 
     @RequestMapping("/authorize")
-    public Object authorize(
-            Model model,
-            HttpServletRequest request)
-            throws URISyntaxException, OAuthSystemException {
+    public Object authorize(Model model, HttpServletRequest request) throws URISyntaxException, OAuthSystemException {
         try {
             //构建OAuth 授权请求
             OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
