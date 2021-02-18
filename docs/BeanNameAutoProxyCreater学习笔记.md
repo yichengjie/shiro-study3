@@ -63,5 +63,5 @@
     c.y.s.common.advice.MyMethodInterceptor  : 调用方法后
     ```
 6. 备注
-   > BeanNameAutoProxyCreator,DefaultAdvisorAutoProxyCreator,AbstractAdvisorAutoProxyCreator
+   > BeanNameAutoProxyCreator,DefaultAdvisorAutoProxyCreator,AbstractAdvisorAutoProxyCreator,
    @EnableAspectJAutoProxy注解通过@Import将AnnotationAwareAspectJAutoProxyCreator类注册到容器
