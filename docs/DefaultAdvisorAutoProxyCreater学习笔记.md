@@ -34,7 +34,7 @@
         @Bean
         public NameMatchMethodPointcutAdvisor nameMatchMethodPointcutAdvisor(MyMethodInterceptor myMethodInterceptor){
             NameMatchMethodPointcutAdvisor nameMatchMethodPointcutAdvisor=new NameMatchMethodPointcutAdvisor();
-            nameMatchMethodPointcutAdvisor.setMappedName("print");
+            nameMatchMethodPointcutAdvisor.setMappedName("print*");
             nameMatchMethodPointcutAdvisor.setAdvice(myMethodInterceptor);
             return nameMatchMethodPointcutAdvisor;
         }
@@ -67,3 +67,4 @@
     ```
 6. 备注
    > BeanNameAutoProxyCreator,DefaultAdvisorAutoProxyCreator,AbstractAdvisorAutoProxyCreator
+   @EnableAspectJAutoProxy注解通过@Import将AnnotationAwareAspectJAutoProxyCreator类注册到容器
