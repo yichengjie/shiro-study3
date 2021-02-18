@@ -150,12 +150,12 @@ public class ShiroConfig {
         shiroFilter.setFilters(filters);
         //filterChainDefinitionsMap
         Map<String,String> map = new HashMap<>() ;
-        map.put("/", "anno") ;
+        map.put("/", "anon") ;
         map.put("/login", "authc") ;
         map.put("/logout", "logout") ;
-        map.put("/authorize","anno") ;
-        map.put("/accessToken", "anno") ;
-        map.put("/userInfo", "anno") ;
+        map.put("/authorize","anon") ;
+        map.put("/accessToken", "anon") ;
+        map.put("/userInfo", "anon") ;
         map.put("/**", "user") ;
         shiroFilter.setFilterChainDefinitionMap(map);
         return shiroFilter ;
