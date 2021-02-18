@@ -3,14 +3,25 @@ package com.yicj.study.oauth.config;
 import com.yicj.study.oauth.common.SpringCacheManagerWrapper;
 import com.yicj.study.oauth.shiro.RetryLimitHashedCredentialsMatcher;
 import com.yicj.study.oauth.shiro.UserRealm;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
+import org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.Filter;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
@@ -80,4 +91,79 @@ public class ShiroConfig {
         return sessionDAO ;
     }
 
+    //<!-- 会话管理器 -->
+    @Bean
+    public DefaultWebSessionManager sessionManager(){
+        DefaultWebSessionManager manager = new DefaultWebSessionManager() ;
+        manager.setGlobalSessionTimeout(1800000);
+        manager.setDeleteInvalidSessions(true);
+        manager.setSessionValidationSchedulerEnabled(true);
+        manager.setSessionDAO(sessionDAO());
+        manager.setSessionIdCookieEnabled(true);
+        manager.setSessionIdCookie(sessionIdCookie());
+        return manager ;
+    }
+
+    // <!-- 会话验证调度器 -->
+    @Bean
+    public QuartzSessionValidationScheduler sessionValidationScheduler(){
+        QuartzSessionValidationScheduler scheduler = new QuartzSessionValidationScheduler() ;
+        scheduler.setSessionValidationInterval(1800000);
+        scheduler.setSessionManager(sessionManager());
+        return scheduler ;
+    }
+
+    //<!-- 安全管理器 -->
+    @Bean
+    public DefaultWebSecurityManager securityManager(UserRealm userRealm,SpringCacheManagerWrapper cacheManager){
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager() ;
+        securityManager.setRealm(userRealm);
+        securityManager.setSessionManager(sessionManager());
+        securityManager.setCacheManager(cacheManager);
+        securityManager.setRememberMeManager(rememberMeManager());
+
+        SecurityUtils.setSecurityManager(securityManager) ;
+        return securityManager ;
+    }
+
+    //<!-- 基于Form表单的身份验证过滤器 -->
+    @Bean
+    public FormAuthenticationFilter formAuthenticationFilter(){
+        FormAuthenticationFilter filter = new FormAuthenticationFilter() ;
+        filter.setUsernameParam("username");
+        filter.setPasswordParam("password");
+        filter.setRememberMeParam("rememberMe");
+        filter.setLoginUrl("/login");
+        return filter ;
+    }
+
+    //DefaultFilter
+    //<!-- Shiro的Web过滤器 -->
+    @Bean
+    public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager){
+        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean() ;
+        shiroFilter.setSecurityManager(securityManager);
+        shiroFilter.setLoginUrl("/login");
+        // filters
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("authc",formAuthenticationFilter());
+        shiroFilter.setFilters(filters);
+        //filterChainDefinitionsMap
+        Map<String,String> map = new HashMap<>() ;
+        map.put("/", "anno") ;
+        map.put("/login", "authc") ;
+        map.put("/logout", "logout") ;
+        map.put("/authorize","anno") ;
+        map.put("/accessToken", "anno") ;
+        map.put("/userInfo", "anno") ;
+        map.put("/**", "user") ;
+        shiroFilter.setFilterChainDefinitionMap(map);
+        return shiroFilter ;
+    }
+
+    // <!-- Shiro生命周期处理器-->
+    @Bean
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor(){
+        return new LifecycleBeanPostProcessor() ;
+    }
 }
