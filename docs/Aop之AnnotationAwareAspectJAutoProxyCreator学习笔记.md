@@ -27,12 +27,17 @@
         }
     }
     ```
-3. 编写配置类
+3. 编写配置类（也可使用@EnableAspectJAutoProxy引入AnnotationAwareAspectJAutoProxyCreator）
     ```java
     @Configuration
-    @EnableAspectJAutoProxy //注入AnnotationAwareAspectJAutoProxyCreator
     @ComponentScan("com.yicj.study.common.service")
     public class MyAppConfig {
+        @Bean
+        public AbstractAutoProxyCreator autoProxyCreator(){
+            AbstractAutoProxyCreator autoProxyCreator = new AnnotationAwareAspectJAutoProxyCreator();
+            autoProxyCreator.setProxyTargetClass(true);
+            return autoProxyCreator ;
+        }
     }
     ```
 4. 测试
@@ -51,9 +56,13 @@
     }
     ```
 5. 结果输出
-    ```text
+   ```text
    c.y.s.a.MyAnnotationAwareAspect          : hello BeanNameAutoProxyCreator ,i come,clazzName [UserServiceImpl] methodName [print]
    c.y.s.a.MyAnnotationAwareAspect          : 调用方法前
    c.y.s.c.service.impl.UserServiceImpl     : hello busi
    c.y.s.a.MyAnnotationAwareAspect          : 调用方法后
-    ```
+   ```
+6. 注意事项
+    ```text
+    使用@AspectJ形式得aop，需要将aspectjweaver.jar和aspectjrt.jar加入到classpath中
+    ```   
