@@ -11,11 +11,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyAnnotationAwareAspect {
 
-    @Around("execution(* com.jd.plugin.dao.aop.*.*(..))")
+    @Around("execution(* com.yicj.study.common.service.*.*(..))")
     public Object process(ProceedingJoinPoint point) throws Throwable {
         String clazzName = point.getTarget().getClass().getSimpleName();
         String methodName = point.getSignature().getName();
-        log.debug("hello BeanNameAutoProxyCreator ,i come,clazzName [{}] methodName [{}]",clazzName,methodName);
-        return point.proceed();
+        log.info("hello BeanNameAutoProxyCreator ,i come,clazzName [{}] methodName [{}]",clazzName,methodName);
+        log.info("调用方法前");
+        Object ret = point.proceed();
+        log.info("调用方法后");
+        return ret ;
     }
 }

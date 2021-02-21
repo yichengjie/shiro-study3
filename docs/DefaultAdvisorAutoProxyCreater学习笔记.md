@@ -47,11 +47,11 @@
 4. 测试
     ```java
     @SpringBootApplication(exclude = AopAutoConfiguration.class)
-    public class BeanNameAutoProxyApp implements ApplicationRunner {
+    public class DefaultAdvisorAutoProxyApp implements ApplicationRunner {
         @Autowired
         private UserService userService ;
         public static void main(String[] args) {
-            SpringApplication.run(BeanNameAutoProxyApp.class, args) ;
+            SpringApplication.run(DefaultAdvisorAutoProxyApp.class, args) ;
         }
         @Override
         public void run(ApplicationArguments args) throws Exception {
@@ -65,6 +65,3 @@
     c.y.s.c.service.impl.UserServiceImpl     : hello busi
     c.y.s.common.advice.MyMethodInterceptor  : 调用方法后
     ```
-6. 备注
-   > BeanNameAutoProxyCreator,DefaultAdvisorAutoProxyCreator,AbstractAdvisorAutoProxyCreator,
-   @EnableAspectJAutoProxy注解通过@Import将AnnotationAwareAspectJAutoProxyCreator类注册到容器

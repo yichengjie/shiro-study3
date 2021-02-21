@@ -1,4 +1,4 @@
-package com.yicj.study.defaultadvisorautoproxy;
+package com.yicj.study.aspectjautoproxy;
 
 import com.yicj.study.common.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 
 @SpringBootApplication(exclude = AopAutoConfiguration.class)
-public class DefaultAdvisorAutoProxyApp implements ApplicationRunner {
-
+public class AspectJAwareAdvisorAutoProxyApp implements ApplicationRunner {
     @Autowired
     private UserService userService ;
 
     public static void main(String[] args) {
-        SpringApplication.run(DefaultAdvisorAutoProxyApp.class, args) ;
+
+        SpringApplication.run(AspectJAwareAdvisorAutoProxyApp.class, args) ;
     }
 
     @Override
